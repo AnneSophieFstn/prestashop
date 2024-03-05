@@ -1,0 +1,113 @@
+{
+  "prestataires": [
+    {
+      "id": 1,
+      "name": "prestataire1",
+      "email": "prestataire1@example.com",
+      "mot_de_passe": "mdp1",
+      "telephone": "0262-12-34-56",
+      "ville": "Saint-Denis",
+      "serviceId": 1,
+      "description": "Description du prestataire 1."
+    },
+    {
+      "id": 2,
+      "name": "prestataire2",
+      "email": "prestataire2@example.com",
+      "mot_de_passe": "mdp2",
+      "telephone": "0262-23-45-67",
+      "ville": "Saint-Paul",
+      "serviceId": 1,
+      "description": "Description du prestataire 2."
+    },
+    {
+      "id": 3,
+      "name": "prestataire3",
+      "email": "prestataire3@example.com",
+      "mot_de_passe": "mdp3",
+      "telephone": "0262-34-56-78",
+      "ville": "Saint-Pierre",
+      "serviceId": 2,
+      "description": "Description du prestataire 3."
+    },
+    {
+      "id": 4,
+      "name": "prestataire4",
+      "email": "prestataire4@example.com",
+      "mot_de_passe": "mdp4",
+      "telephone": "0262-45-67-89",
+      "ville": "Le Tampon",
+      "serviceId": 2,
+      "description": "Description du prestataire 4."
+    },
+    {
+      "id": 5,
+      "name": "prestataire5",
+      "email": "prestataire5@example.com",
+      "mot_de_passe": "mdp5",
+      "telephone": "0262-56-78-90",
+      "ville": "Saint-André",
+      "serviceId": 3,
+      "description": "Description du prestataire 5."
+    },
+    {
+      "id": 6,
+      "name": "prestataire6",
+      "email": "prestataire6@example.com",
+      "mot_de_passe": "mdp6",
+      "telephone": "0262-67-89-01",
+      "ville": "Le Port",
+      "serviceId": 3,
+      "description": "Description du prestataire 6."
+    },
+    {
+      "id": 7,
+      "name": "prestataire7",
+      "email": "prestataire7@example.com",
+      "mot_de_passe": "mdp7",
+      "telephone": "0262-78-90-12",
+      "ville": "Saint-Louis",
+      "serviceId": 4,
+      "description": "Description du prestataire 7."
+    },
+    {
+      "id": 8,
+      "name": "prestataire8",
+      "email": "prestataire8@example.com",
+      "mot_de_passe": "mdp8",
+      "telephone": "0262-89-01-23",
+      "ville": "La Possession",
+      "serviceId": 4,
+      "description": "Description du prestataire 8."
+    },
+    {
+      "id": 9,
+      "name": "prestataire9",
+      "email": "prestataire9@example.com",
+      "mot_de_passe": "mdp9",
+      "telephone": "0262-90-12-34",
+      "ville": "Saint-Benoît",
+      "serviceId": 5,
+      "description": "Description du prestataire 9."
+    },
+    {
+      "id": 10,
+      "name": "prestataire10",
+      "email": "prestataire10@example.com",
+      "mot_de_passe": "mdp10",
+      "telephone": "0262-01-23-45",
+      "ville": "Saint-Joseph",
+      "serviceId": 6,
+      "description": "Description du prestataire 10."
+    }
+  ],
+
+  "services": [
+    { "id": 1, "name": "Informatique et technologies de l'information" },
+    { "id": 2, "name": "Services financiers et comptabilité" },
+    { "id": 3, "name": "Consultation en management et stratégie" },
+    { "id": 4, "name": "Services de marketing et publicité" },
+    { "id": 5, "name": "Services de conception graphique et multimédia" },
+    { "id": 6, "name": "Services de traduction et linguistiques" }
+  ]
+}
