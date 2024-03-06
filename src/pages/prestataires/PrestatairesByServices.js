@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
 export default function PrestatairesByServices() {
-  const { serviceId } = useParams();
+  const {serviceId} = useParams();
+
   console.log("serviceId new: ", serviceId);
   const [prestataires, setPrestataires] = useState([]);
 
@@ -11,12 +12,10 @@ export default function PrestatairesByServices() {
     fetch("http://localhost:3030/prestataires")
       .then((response) => response.json())
       .then((data) => {
-        console.log("Data: ", data);
         // Filtre les prestataires en fonction de serviceId
         const filteredPrestataires = data.filter(
-          (prestataire) => prestataire.serviceId === 1
-        );
-        console.log("filteredPrestataires: ", filteredPrestataires);
+          (prestataire) => prestataire.serviceId === parseInt(serviceId)
+          );
         setPrestataires(filteredPrestataires);
       })
       .catch((error) =>
