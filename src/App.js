@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default function App() {
   const [services, setServices] = useState([]);
 
-  const getAllServices = () => {
-    var requestOptions = {
-      method: "GET",
-      redirect: "follow",
-    }; /*  */
+  const getAllServices = async () => {
 
-    fetch("http://localhost:3030/services", requestOptions)
-      .then((response) => response.json())
-      .then((result) => setServices(result))
-      .catch((error) => console.log("error", error));
+    await axios.get("http://127.0.0.1:3001/services")
+      .then((response) => {
+        setServices(response.data)
+      });
   };
 
   useEffect(() => {
@@ -30,7 +27,7 @@ export default function App() {
             {services.map((service) => (
               <Link
                 key={service.id}
-                to={`/services/${service.id}`}
+                to={`/prestataires/services/${service.id}`}
                 className="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
               >
                 <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">

@@ -18,7 +18,7 @@ export default function Navigation() {
         <Route path="/home" element={<App />} />
         <Route path="/profil" element={<Profil />} />
         <Route
-          path="/services/:serviceId"
+          path="/prestataires/services/:serviceId"
           element={<PrestatairesByServices />}
         />
         <Route path="/prestataires/:id" element={<FichePrestataire />} />

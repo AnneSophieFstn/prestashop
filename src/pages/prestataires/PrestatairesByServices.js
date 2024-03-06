@@ -1,33 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import axios from "axios";
 
 export default function PrestatairesByServices() {
   const {serviceId} = useParams();
 
-  console.log("serviceId new: ", serviceId);
   const [prestataires, setPrestataires] = useState([]);
 
+  const getAllPrestataireByServiceId = async () => {
+    await axios.get(`http://127.0.0.1:3001/prestataires/services/${serviceId}`)
+    .then((response) => {
+      setPrestataires(response.data)
+    })
+  }
+
   useEffect(() => {
-    // Charge les données JSON
-    fetch("http://localhost:3030/prestataires")
-      .then((response) => response.json())
-      .then((data) => {
-        // Filtre les prestataires en fonction de serviceId
-        const filteredPrestataires = data.filter(
-          (prestataire) => prestataire.serviceId === parseInt(serviceId)
-          );
-        setPrestataires(filteredPrestataires);
-      })
-      .catch((error) =>
-        console.error("Erreur lors du chargement des données JSON:", error)
-      );
+    getAllPrestataireByServiceId();
   }, [serviceId]); // Réexécute le chargement des données lorsque serviceId change
 
   return (
     <>
       <div className="flex justify-center pt-5">
         <div className="flex-col text-center">
-          <h1 className="text-3xl font-bold pb-5">Liste des domaines</h1>
+          <h1 className="text-3xl font-bold pb-5">Liste des services</h1>
 
           <div className="grid grid-cols-3 gap-4">
             {prestataires.map((prestataire) => (

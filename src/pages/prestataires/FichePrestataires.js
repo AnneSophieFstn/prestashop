@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
+import axios from "axios";
 
 export default function FichePrestataire() {
   const { id } = useParams();
-  console.log("id", id);
   const [prestataire, setPrestataire] = useState([]);
 
+  const getPrestataire = async () => {
+    await axios.get(`http://127.0.0.1:3001/prestataires/${id}`)
+    .then((response) => {
+      setPrestataire(response.data)
+    })
+  }
+
   useEffect(() => {
-    // Charge les données JSON
-    fetch(`http://localhost:3030/prestataires/${id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("data", data);
-        setPrestataire(data);
-      })
-      .catch((error) =>
-        console.error("Erreur lors du chargement des données JSON:", error)
-      );
+    getPrestataire();
   }, [id]);
 
   return (
@@ -41,13 +39,13 @@ export default function FichePrestataire() {
                   <svg className="rtl:rotate-180 w-3.5 h-3.5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
                   </svg>
-                  {prestataire.telephone}
+                  {prestataire.phone}
                 </a>
                 <a href="#" className=" mr-5 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                   <svg className="rtl:rotate-180 w-3.5 h-3.5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
                   </svg>
-                  {prestataire.ville}
+                  {prestataire.city}
                 </a>
               </div>
             </div>
