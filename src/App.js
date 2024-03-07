@@ -21,7 +21,7 @@ export default function App() {
     <>
       <div className="flex justify-center pt-5">
         <div className="flex-col text-center">
-          <h1 className="text-3xl font-bold pb-5">Liste des domaines</h1>
+          <h1 className="text-3xl font-bold pb-5">Liste des services</h1>
 
           <div className="grid grid-cols-3 gap-4">
             {services.map((service) => (

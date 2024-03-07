@@ -1,17 +1,39 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthProvider";
 
 const navigation = [
   { name: "Accueil", to: "/home", current: true },
 ];
+
+const link = [
+  { name: "Validation en attente", to: "/validation-inscription" },
+  { name: "Création de compte", to: "/creation-prestataire" },
+]
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Navbar() {
+  const { isAuthenticated, setIsAuthenticated, setToken } = useAuth();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    // Supprimez le token du stockage local
+    localStorage.removeItem("token");
+    // Mettez à jour l'état d'authentification
+    setIsAuthenticated(false);
+    navigate("/login");
+
+  };
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -32,19 +54,38 @@ export default function Navbar() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                {navigation.map((item) => (
+                  {navigation.map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.to}
+                    >
+                      <img
+                        className="h-8 w-auto"
+                        src="/assets/prestalogo.png"
+                        alt="Your Company"
+                      />
+                    </Link>
+                  ))}
+                </div>
+
+                <div className="hidden sm:ml-6 sm:block">
+                  <div className="flex space-x-4">
+                    {link.map((item) => (
                       <Link
                         key={item.name}
                         to={item.to}
+                        className={classNames(
+                          item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                          'rounded-md px-3 py-2 text-sm font-medium'
+                        )}
+                        aria-current={item.current ? 'page' : undefined}
                       >
-                  <img
-                    className="h-8 w-auto"
-                    src="/assets/prestalogo.png"
-                    alt="Your Company"
-                  />
+                        {item.name}
                       </Link>
                     ))}
+                  </div>
                 </div>
+
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 
@@ -88,8 +129,7 @@ export default function Navbar() {
                       <Menu.Item>
                         {({ active }) => (
                           <Link
-                            to="#"
-                            className={classNames(
+                              onClick={handleLogout}                            className={classNames(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"
                             )}
