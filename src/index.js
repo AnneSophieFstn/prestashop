@@ -3,11 +3,14 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import Navigation from "./components/Navigation";
+import { AuthProvider } from "./components/AuthProvider";
 
 const root = createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Navigation />
+    <AuthProvider>
+      <Navigation />
+    </AuthProvider>
   </React.StrictMode>
 );
 
