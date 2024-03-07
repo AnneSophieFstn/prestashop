@@ -1,13 +1,36 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../../components/AuthProvider.js";
 
 export default function Login() {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const { isAuthenticated, setIsAuthenticated } = useAuth();
+  const [accountNA, setaccountNA] = useState("");
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post("http://127.0.0.1:3001/login", {email, password});
+      setIsAuthenticated(true);
+      localStorage.setItem("token", response.data.token);
+      navigate("/home");
+    } catch (error) {
+      console.log(error.response.data.message)
+      setaccountNA(error.response.data.message)
+    }
+  }
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             className="mx-auto h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+            src="/assets/prestalogo.png"
             alt="Your Company"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -16,7 +39,7 @@ export default function Login() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form className="space-y-6" onSubmit={handleLogin}>
             <div>
               <label
                 htmlFor="email"
@@ -28,8 +51,10 @@ export default function Login() {
                 <input
                   id="email"
                   name="email"
+                  value={email}
                   type="email"
                   autoComplete="email"
+                  onChange={e => setEmail(e.target.value)}
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
@@ -44,25 +69,23 @@ export default function Login() {
                 >
                   Mot de passe
                 </label>
-                <div className="text-sm">
-                  <Link
-                    href="#"
-                    className="font-semibold text-indigo-600 hover:text-indigo-500"
-                  >
-                    Mot de passe oublié?
-                  </Link>
-                </div>
               </div>
               <div className="mt-2">
                 <input
                   id="password"
                   name="password"
+                  value={password}
                   type="password"
                   autoComplete="current-password"
+                  onChange={e => setPassword(e.target.value)}
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
+              {accountNA && (
+
+                <p className="text-red-600 text-center pt-2"> {accountNA}</p>
+              )}
             </div>
 
             <div>
