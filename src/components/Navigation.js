@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import App from "../App";
@@ -8,8 +13,8 @@ import Profil from "../pages/profil/Profil";
 import PrestatairesByServices from "../pages/prestataires/PrestatairesByServices";
 import FichePrestataire from "../pages/prestataires/FichePrestataires";
 import { useAuth } from "./AuthProvider.js"; // Importez le hook useAuth
-import CreateAccount from "../pages/admin/CreateAccount.js";
 import ValidationAccount from "../pages/admin/ValidationAccount.js";
+import Utilisateurs from "../pages/admin/Utilisateurs.js";
 
 export default function Navigation() {
   const { isAuthenticated, setIsAuthenticated } = useAuth();
@@ -44,8 +49,11 @@ export default function Navigation() {
               element={<PrestatairesByServices />}
             />
             <Route path="/prestataires/:id" element={<FichePrestataire />} />
-            <Route path="/validation-inscription" element={<ValidationAccount />} />
-            <Route path="/creation-prestataire" element={<CreateAccount />} />
+            <Route
+              path="/validation-inscription"
+              element={<ValidationAccount />}
+            />
+            <Route path="/utilisateurs" element={<Utilisateurs />} />
           </>
         )}
       </Routes>
