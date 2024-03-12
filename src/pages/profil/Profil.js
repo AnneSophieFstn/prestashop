@@ -1,6 +1,12 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../../components/AuthProvider.js";
+import { useEffect } from "react";
+import axios from "axios";
 
 export default function Profil() {
+  const { user, me } = useAuth();
+  console.log("dataUserLog: ", user);
+
   const secteursActivite = [
     { id: 1, nom: "Informatique et technologies de l'information" },
     { id: 2, nom: "Services financiers et comptabilité" },
@@ -33,6 +39,10 @@ export default function Profil() {
     { id: 16, nom: "Cilaos" },
     { id: 17, nom: "Entre-Deux" },
   ];
+
+  useEffect(() => {
+    me();
+  }, []);
 
   return (
     <>
@@ -162,9 +172,9 @@ export default function Profil() {
                     </option>
                   ))}
                 </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                   <svg
-                    class="fill-current h-4 w-4"
+                    className="fill-current h-4 w-4"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
                   >
@@ -196,9 +206,9 @@ export default function Profil() {
                     </option>
                   ))}
                 </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                   <svg
-                    class="fill-current h-4 w-4"
+                    className="fill-current h-4 w-4"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
                   >

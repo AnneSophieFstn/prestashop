@@ -7,22 +7,20 @@ export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const { isAuthenticated, setIsAuthenticated } = useAuth();
+  const { login, me } = useAuth();
   const [accountNA, setaccountNA] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://127.0.0.1:3001/login", {email, password});
-      setIsAuthenticated(true);
-      localStorage.setItem("token", response.data.token);
+      await login(email, password);
+      await me();
       navigate("/home");
     } catch (error) {
-      console.log(error.response.data.message)
-      setaccountNA(error.response.data.message)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <>
@@ -54,7 +52,7 @@ export default function Login() {
                   value={email}
                   type="email"
                   autoComplete="email"
-                  onChange={e => setEmail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
@@ -77,13 +75,12 @@ export default function Login() {
                   value={password}
                   type="password"
                   autoComplete="current-password"
-                  onChange={e => setPassword(e.target.value)}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
               {accountNA && (
-
                 <p className="text-red-600 text-center pt-2"> {accountNA}</p>
               )}
             </div>
