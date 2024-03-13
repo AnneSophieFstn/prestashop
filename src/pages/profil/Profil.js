@@ -1,11 +1,18 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../../components/AuthProvider.js";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function Profil() {
-  const { user, me } = useAuth();
-  console.log("dataUserLog: ", user);
+  const { userLog } = useAuth();
+  console.log("dataUserLog: ", userLog);
+
+  const [idP, setIdP] = useState();
+  const [name, setName] = useState();
+  const [phone, setPhone] = useState();
+  const [city, setCity] = useState();
+  const [service, setService] = useState();
+  const [description, setDescription] = useState();
 
   const secteursActivite = [
     { id: 1, nom: "Informatique et technologies de l'information" },
@@ -40,35 +47,52 @@ export default function Profil() {
     { id: 17, nom: "Entre-Deux" },
   ];
 
+  const getDataPresta = async () => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:3001/prestataires/${userLog.id}`)
+      setIdP(response.data.id);
+      setName(response.data.name);
+      setPhone(response.data.phone);
+      setCity(response.data.city);
+      setService(response.data.service);
+      setDescription(response.data.description);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const editProfil = async (e) => {
+    e.preventDefault();
+
+    const data = {
+      name: name,
+      phone: phone,
+      city: city,
+      service: service,
+      description: description
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.put(`http://127.0.0.1:3001/prestataires/${userLog.id}`, { data }, {headers: {
+        Authorization: `Bearer ${token}`, // Envoyer le token JWT dans l'en-tête de la requête
+      }})
+      console.log("response: ", response)
+    } catch (error) {
+      console.error(error)
+    }
+
+  }
+
   useEffect(() => {
-    me();
-  }, []);
+    getDataPresta();
+  }, [])
 
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-5 lg:px-8">
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Image
-              </label>
-              <img src="https://picsum.photos/200/300" alt="prestataires" />
-
-              <div className="mt-2">
-                <input
-                  id="image"
-                  name="image"
-                  type="file"
-                  placeholder="Choisir une image"
-                  required
-                  className="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
+          <form className="space-y-6" onSubmit={editProfil}>
             <div>
               <label
                 htmlFor="email"
@@ -80,49 +104,10 @@ export default function Profil() {
                 <input
                   id="name"
                   name="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   type="text"
                   placeholder="Nom de l'entreprise"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Email
-              </label>
-              <div className="mt-2">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="Email"
-                  autoComplete="email"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Mot de passe
-                </label>
-              </div>
-              <div className="mt-2">
-                <input
-                  id="password"
-                  placeholder="Mot de passe"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
@@ -142,6 +127,8 @@ export default function Profil() {
                 <input
                   id="phone"
                   name="phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
                   placeholder="0262-12-34-56"
                   type="tel"
                   required
@@ -161,13 +148,15 @@ export default function Profil() {
               </div>
               <div className="mt-2">
                 <select
-                  id="secteurActivite"
-                  name="secteurActivite"
+                  id="ville"
+                  name="ville"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)} 
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 >
                   {/* Mapping sur la liste des secteurs d'activité pour créer les options */}
                   {villes.map((ville) => (
-                    <option key={ville.id} value={ville.id}>
+                    <option key={ville.id} value={ville.nom}>
                       {ville.nom}
                     </option>
                   ))}
@@ -187,7 +176,6 @@ export default function Profil() {
             <div>
               <div className="flex items-center justify-between">
                 <label
-                  htmlFor="password"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
                   Secteur d'activités
@@ -197,6 +185,8 @@ export default function Profil() {
                 <select
                   id="secteurActivite"
                   name="secteurActivite"
+                  value={service}
+                  onChange={(e) => setService(e.target.value)}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 >
                   {/* Mapping sur la liste des secteurs d'activité pour créer les options */}
@@ -231,6 +221,8 @@ export default function Profil() {
                 <textarea
                   id="description"
                   name="description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                   placeholder="Entrer une description"
                   type="description"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
