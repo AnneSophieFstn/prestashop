@@ -6,7 +6,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
+  const [userLog, setUserLog] = useState();
 
   const login = async (email, password) => {
     try {
@@ -16,11 +16,14 @@ export const AuthProvider = ({ children }) => {
       });
 
       const token = response.data.token;
+      const user = response.data.user;
 
-      console.log("token: ", token);
-      if (token) {
-        localStorage.setItem("token", response.data.token);
-        await me();
+      console.log(user);
+
+      if (token && user) {
+        localStorage.setItem("token", token);
+        setUserLog(user)
+        setIsAuthenticated(true);
       }
     } catch (error) {
       console.log(error.response.data.message);
@@ -35,21 +38,20 @@ export const AuthProvider = ({ children }) => {
           Authorization: `Bearer ${token}`, // Envoyer le token JWT dans l'en-tête de la requête
         },
       });
-      console.log("response.data: ", response.data);
-      setUser(response.data);
+      setUserLog(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
     localStorage.removeItem("token");
-    setUser(null);
+    setIsAuthenticated(false);
   };
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, setIsAuthenticated, login, me, logout, user }}
+      value={{ isAuthenticated, setIsAuthenticated, login, logout, userLog, me }}
     >
       {children}
     </AuthContext.Provider>

@@ -7,7 +7,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const { login, me } = useAuth();
+  const { login } = useAuth();
   const [accountNA, setaccountNA] = useState("");
 
   const handleLogin = async (e) => {
@@ -15,7 +15,6 @@ export default function Login() {
 
     try {
       await login(email, password);
-      await me();
       navigate("/home");
     } catch (error) {
       console.log(error);

@@ -6,7 +6,7 @@ import { useAuth } from "./AuthProvider";
 
 const navigation = [{ name: "Accueil", to: "/home", current: true }];
 
-const link = [
+const linkAdmin = [
   { name: "Utilisateurs", to: "/utilisateurs" },
   { name: "Validation en attente", to: "/validation-inscription" },
 ];
@@ -16,13 +16,10 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
-  const { isAuthenticated, setIsAuthenticated, setToken } = useAuth();
+  const { userLog, logout } = useAuth();
   let navigate = useNavigate();
-  const handleLogout = () => {
-    // Supprimez le token du stockage local
-    localStorage.removeItem("token");
-    // Mettez à jour l'état d'authentification
-    setIsAuthenticated(false);
+  const handleLogout = async() => {
+    await logout();
     navigate("/login");
   };
 
@@ -58,23 +55,28 @@ export default function Navbar() {
                 </div>
 
                 <div className="hidden sm:ml-6 sm:block">
+                    {userLog.role === "Admin" ? (
                   <div className="flex space-x-4">
-                    {link.map((item) => (
-                      <Link
-                        key={item.name}
-                        to={item.to}
-                        className={classNames(
-                          item.current
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                          "rounded-md px-3 py-2 text-sm font-medium"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
-                      >
+
+                        {linkAdmin.map((item) => (
+                          <Link
+                          key={item.name}
+                          to={item.to}
+                          className={classNames(
+                            item.current
+                              ? "bg-gray-900 text-white"
+                              : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                            "rounded-md px-3 py-2 text-sm font-medium"
+                          )}
+                          aria-current={item.current ? "page" : undefined}
+                        >
                         {item.name}
-                      </Link>
-                    ))}
+                        </Link>
+                        ))}
                   </div>
+                      ) : (
+                        null
+                      )}
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">

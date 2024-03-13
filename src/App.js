@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "./components/AuthProvider";
 
 export default function App() {
   const [services, setServices] = useState([]);
+
+  const {userLog} = useAuth();
+
+  console.log("Userlog: ", userLog);
 
   const getAllServices = async () => {
 
