@@ -6,16 +6,14 @@ import { useAuth } from "./components/AuthProvider";
 export default function App() {
   const [services, setServices] = useState([]);
 
-  const {userLog} = useAuth();
+  const { userLog } = useAuth();
 
   console.log("Userlog: ", userLog);
 
   const getAllServices = async () => {
-
-    await axios.get("http://127.0.0.1:3001/services")
-      .then((response) => {
-        setServices(response.data)
-      });
+    await axios.get("http://127.0.0.1:3001/services").then((response) => {
+      setServices(response.data);
+    });
   };
 
   useEffect(() => {
