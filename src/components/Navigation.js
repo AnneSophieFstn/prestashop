@@ -12,7 +12,7 @@ import Navbar from "./Navbar";
 import Profil from "../pages/profil/Profil";
 import PrestatairesByServices from "../pages/prestataires/PrestatairesByServices";
 import FichePrestataire from "../pages/prestataires/FichePrestataires";
-import { useAuth } from "./AuthProvider.js"; // Importez le hook useAuth
+import { useAuth } from "./AuthProvider.js";
 import ValidationAccount from "../pages/admin/ValidationAccount.js";
 import Utilisateurs from "../pages/admin/Utilisateurs.js";
 
@@ -30,13 +30,19 @@ export default function Navigation() {
   }, []);
   return (
     <Router>
-      {isAuthenticated && <Navbar />}
+      <Navbar />
       <Routes>
         {!isAuthenticated && (
           <>
-            <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="/" element={<Navigate to="/home" />} />
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/register" element={<Register />} />
+            <Route path="/home" element={<App />} />
+            <Route
+              path="/prestataires/services/:serviceId"
+              element={<PrestatairesByServices />}
+            />
+            <Route path="/prestataire/:id" element={<FichePrestataire />} />
           </>
         )}
         {isAuthenticated && (
@@ -48,7 +54,7 @@ export default function Navigation() {
               path="/prestataires/services/:serviceId"
               element={<PrestatairesByServices />}
             />
-            <Route path="/prestataires/:id" element={<FichePrestataire />} />
+            <Route path="/prestataire/:id" element={<FichePrestataire />} />
             <Route
               path="/validation-inscription"
               element={<ValidationAccount />}

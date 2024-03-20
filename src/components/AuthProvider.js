@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userLog, setUserLog] = useState();
 
-  const login = async (email, password) => {
+  const login = async (email, password, setErrorM) => {
     try {
       const response = await axios.post("http://127.0.0.1:3001/login", {
         email,
@@ -18,15 +18,17 @@ export const AuthProvider = ({ children }) => {
       const token = response.data.token;
       const user = response.data.user;
 
-      console.log(user);
-
       if (token && user) {
         localStorage.setItem("token", token);
-        setUserLog(user)
+        setUserLog(user);
         setIsAuthenticated(true);
+        return true;
+      } else {
+        return false;
       }
     } catch (error) {
-      console.log(error.response.data.message);
+      setErrorM(error.response.data.message);
+      return false;
     }
   };
 
@@ -51,7 +53,14 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, setIsAuthenticated, login, logout, userLog, me }}
+      value={{
+        isAuthenticated,
+        setIsAuthenticated,
+        login,
+        logout,
+        userLog,
+        me,
+      }}
     >
       {children}
     </AuthContext.Provider>
