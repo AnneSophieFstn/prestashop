@@ -40,6 +40,12 @@ export default function ValidationAccount() {
       const response = await axios.put(
         `http://127.0.0.1:3001/validate-account/${id}`
       );
+
+      if (response.status === 200) {
+        await axios.post(`http://127.0.0.1:3001/prestataires/create`, {
+          userId: id,
+        });
+      }
       console.log(response);
       getAllAccountNA();
     } catch (error) {
