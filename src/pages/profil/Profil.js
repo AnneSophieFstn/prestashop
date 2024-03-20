@@ -7,25 +7,14 @@ export default function Profil() {
   const { userLog } = useAuth();
   console.log("dataUserLog: ", userLog);
 
+  const [services, setServices] = useState([]);
+
   const [idP, setIdP] = useState();
   const [name, setName] = useState();
   const [phone, setPhone] = useState();
   const [city, setCity] = useState();
   const [service, setService] = useState();
   const [description, setDescription] = useState();
-
-  const secteursActivite = [
-    { id: 1, nom: "Informatique et technologies de l'information" },
-    { id: 2, nom: "Services financiers et comptabilité" },
-    { id: 3, nom: "Consultation en management et stratégie" },
-    { id: 4, nom: "Services de marketing et publicité" },
-    { id: 5, nom: "Services de conception graphique et multimédia" },
-    { id: 6, nom: "Services de traduction et linguistiques" },
-    { id: 7, nom: "Services de photographie et vidéo" },
-    { id: 8, nom: "Services de rédaction et édition" },
-    { id: 9, nom: "Services juridiques et notariaux" },
-    { id: 10, nom: "Services de santé et bien-être" },
-  ];
 
   const villes = [
     { id: 1, nom: "Saint-Denis" },
@@ -47,9 +36,17 @@ export default function Profil() {
     { id: 17, nom: "Entre-Deux" },
   ];
 
+  const getAllServices = async () => {
+    await axios.get("http://127.0.0.1:3001/services").then((response) => {
+      setServices(response.data);
+    });
+  };
+
   const getDataPresta = async () => {
     try {
-      const response = await axios.get(`http://127.0.0.1:3001/prestataires/${userLog.id}`)
+      const response = await axios.get(
+        `http://127.0.0.1:3001/prestataires/${userLog.id}`
+      );
       setIdP(response.data.id);
       setName(response.data.name);
       setPhone(response.data.phone);
@@ -57,9 +54,9 @@ export default function Profil() {
       setService(response.data.service);
       setDescription(response.data.description);
     } catch (error) {
-      console.error(error);
+      console.error("getDataPresta: ", error);
     }
-  }
+  };
 
   const editProfil = async (e) => {
     e.preventDefault();
@@ -69,24 +66,30 @@ export default function Profil() {
       phone: phone,
       city: city,
       service: service,
-      description: description
-    }
+      description: description,
+    };
 
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.put(`http://127.0.0.1:3001/prestataires/${userLog.id}`, { data }, {headers: {
-        Authorization: `Bearer ${token}`, // Envoyer le token JWT dans l'en-tête de la requête
-      }})
-      console.log("response: ", response)
+      const response = await axios.put(
+        `http://127.0.0.1:3001/prestataires/${userLog.id}`,
+        { data },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Envoyer le token JWT dans l'en-tête de la requête
+          },
+        }
+      );
+      console.log("response: ", response);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-
-  }
+  };
 
   useEffect(() => {
     getDataPresta();
-  }, [])
+    getAllServices();
+  }, []);
 
   return (
     <>
@@ -151,7 +154,7 @@ export default function Profil() {
                   id="ville"
                   name="ville"
                   value={city}
-                  onChange={(e) => setCity(e.target.value)} 
+                  onChange={(e) => setCity(e.target.value)}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 >
                   {/* Mapping sur la liste des secteurs d'activité pour créer les options */}
@@ -175,24 +178,20 @@ export default function Profil() {
 
             <div>
               <div className="flex items-center justify-between">
-                <label
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
+                <label className="block text-sm font-medium leading-6 text-gray-900">
                   Secteur d'activités
                 </label>
               </div>
               <div className="mt-2">
                 <select
-                  id="secteurActivite"
-                  name="secteurActivite"
-                  value={service}
-                  onChange={(e) => setService(e.target.value)}
+                  id="service"
+                  name="service"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 >
                   {/* Mapping sur la liste des secteurs d'activité pour créer les options */}
-                  {secteursActivite.map((secteur) => (
-                    <option key={secteur.id} value={secteur.id}>
-                      {secteur.nom}
+                  {services.map((service) => (
+                    <option key={service.id} value={service.id}>
+                      {service.name}
                     </option>
                   ))}
                 </select>
@@ -243,7 +242,7 @@ export default function Profil() {
           <p className="mt-10 text-center text-sm text-gray-500">
             Voir ma page de prestataire.{" "}
             <Link
-              to="/login"
+              to={`/prestataire/${idP}`}
               className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
             >
               Cliquez-ici.

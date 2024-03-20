@@ -3,16 +3,19 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 
 export default function PrestatairesByServices() {
-  const {serviceId} = useParams();
+  const { serviceId } = useParams();
+
+  console.log("serviceId: ", serviceId);
 
   const [prestataires, setPrestataires] = useState([]);
 
   const getAllPrestataireByServiceId = async () => {
-    await axios.get(`http://127.0.0.1:3001/prestataires/services/${serviceId}`)
-    .then((response) => {
-      setPrestataires(response.data)
-    })
-  }
+    await axios
+      .get(`http://127.0.0.1:3001/prestataires/services/${serviceId}`)
+      .then((response) => {
+        setPrestataires(response.data);
+      });
+  };
 
   useEffect(() => {
     getAllPrestataireByServiceId();
@@ -28,7 +31,7 @@ export default function PrestatairesByServices() {
             {prestataires.map((prestataire) => (
               <Link
                 key={prestataire.id}
-                to={`/prestataires/${prestataire.id}`}
+                to={`/prestataire/${prestataire.id}`}
                 className="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
               >
                 <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
